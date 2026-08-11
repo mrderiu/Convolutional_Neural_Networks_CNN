@@ -149,18 +149,19 @@ Training for too many epochs may cause the model to overfit the training data. E
 ### Project Structure
 
 ```
-main.py                 # Orquesta el pipeline completo: entrena, compara
-                         # y guarda para producción el mejor modelo
+main.py                  # Orchestrates the complete pipeline: trains, compares,
+                         # and saves the best model for production
 src/
-├── config.py            # Rutas, columnas, hiperparámetros, selección de modelo
-├── data_loader.py        # Carga del CSV y split train/validation/test
-├── preprocessing.py      # Limpieza de valores y ColumnTransformer (impute + scale + one-hot)
-├── models.py              # Arquitecturas del MLP + factory build_model()
-├── early_stopping.py      # Implementación de Early Stopping
-├── train.py               # Loop de entrenamiento (forward, loss, backward, optimizer)
-├── evaluate.py            # Métricas sobre validación/test
-└── experiment_log.py      # Registro de cada corrida en logs/experiments.csv
-predict.py                # Inferencia en producción con el modelo ganador guardado
+├── config.py            # Paths, columns, hyperparameters, and model selection
+├── data_loader.py       # CSV loading and train/validation/test split
+├── preprocessing.py     # Data cleaning and ColumnTransformer
+│                        # (imputation + scaling + one-hot encoding)
+├── models.py            # MLP architectures + build_model() factory
+├── early_stopping.py    # Early Stopping implementation
+├── train.py             # Training loop (forward, loss, backward, optimizer)
+├── evaluate.py          # Validation and test evaluation metrics
+└── experiment_log.py    # Logs each experiment run to logs/experiments.csv
+predict.py               # Production inference using the saved winning model
 ```
 
 ### Model Variants (`src/models.py`)
