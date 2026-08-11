@@ -91,5 +91,141 @@ nn.Conv2d(
     padding=0 # Number of pixels added around the image border.
 )
 ```
+<<<<<<< HEAD
+=======
+a more modern implementation is
+```
+model = nn.Sequential(
+    nn.Linear(8, 12),
+    nn.ReLU(),
+    nn.Linear(12, 8),
+    nn.ReLU(),
+    nn.Linear(8, 1)
+)
+
+loss_fn = nn.BCEWithLogitsLoss()
+```
+BCEWithLogitsLoss combines the Sigmoid activation and Binary Cross Entropy into a single operation that is more numerically stable and is the recommended approach in PyTorch.
+
+#### More Features
+
+* **Dropout**
+As neural networks become larger, they may memorize the training data instead of learning general patterns. Dropout is a regularization technique that randomly disables a percentage of neurons during training.
+
+Example:
+```
+nn.Linear(32, 16),
+nn.ReLU(),
+nn.Dropout(0.2)
+```
+This forces the network to learn more robust representations and reduces overfitting.
+
+* **Normalize Activations**
+BatchNorm1d normalizes the outputs of a layer during training. A common pattern is:
+```
+Linear --> BatchNorm --> ReLU --> Dropout
+```
+Batch Normalization often stabilizes training and allows the optimizer to converge faster.
+
+* **Dataset and DataLoader**
+Instead of manually creating mini-batches with array slicing, PyTorch provides the Dataset and DataLoader classes.
+
+DataLoader automatically:
+
+* creates mini-batches,
+* shuffles the training data,
+* loads batches efficiently,
+* simplifies the training loop.
+
+These classes are the standard way of feeding data into neural networks.
+
+* **Imbalanced Data**
+Many real-world datasets contain significantly more samples from one class than the other. For binary classification problems, PyTorch provides the pos_weight parameter in BCEWithLogitsLoss to give more importance to the minority class during training. This is particularly useful for applications such as fraud detection, anomaly detection, and medical diagnosis.
+
+* **Early Stopping**
+Training for too many epochs may cause the model to overfit the training data. Early stopping monitors the validation loss and automatically stops training when the model no longer improves. It also saves the best-performing version of the model.
+
+
+### Project Structure
+
+```
+main.py                 # Orquesta el pipeline completo: entrena, compara
+                         # y guarda para producción el mejor modelo
+src/
+├── config.py            # Rutas, columnas, hiperparámetros, selección de modelo
+├── data_loader.py        # Carga del CSV y split train/validation/test
+├── preprocessing.py      # Limpieza de valores y ColumnTransformer (impute + scale + one-hot)
+├── models.py              # Arquitecturas del MLP + factory build_model()
+├── early_stopping.py      # Implementación de Early Stopping
+├── train.py               # Loop de entrenamiento (forward, loss, backward, optimizer)
+├── evaluate.py            # Métricas sobre validación/test
+└── experiment_log.py      # Registro de cada corrida en logs/experiments.csv
+predict.py                # Inferencia en producción con el modelo ganador guardado
+```
+
+### Model Variants (`src/models.py`)
+
+Both architectures return **logits** (without applying `Sigmoid` to the output), because `train.py` always uses `nn.BCEWithLogitsLoss`. This loss function already incorporates the sigmoid operation in a numerically stable way and also allows the minority class to be weighted using `pos_weight`.
+
+Combining a model that already applies `Sigmoid` with `BCEWithLogitsLoss` would apply the sigmoid function twice and produce incorrect output probabilities. For this reason, the project consistently follows the logits-only approach across all model variants.
+
+| Variant | Architecture | When to Use |
+| --- | --- | --- |
+| `"simple"` | `Linear → ReLU` ×3 | Baseline model without regularization. Suitable as a starting point or reference model. |
+| `"regularized"` | `Linear → BatchNorm → ReLU → Dropout` ×2 | Adds normalization and regularization to reduce overfitting. Recommended as the default architecture. |
+
+The active variant can be configured through `config.MODEL_VARIANT` and is instantiated using the `build_model(name, input_dim)` factory, without requiring any changes to `main.py`.
+
+### Architecture Comparison and Best Model Selection
+
+`main.py` does not train a single architecture. Instead, it iterates through **all** model variants registered in `MODEL_REGISTRY` (`src/models.py`), trains each architecture independently, and compares their performance.
+
+This design makes the project easily extensible: adding a new architecture to `MODEL_REGISTRY` automatically includes it in the comparison process without requiring any changes to `main.py`.
+
+The winning model is selected based on its **validation F1 score**, rather than accuracy or test performance:
+
+- **F1 instead of accuracy** because the positive class (`income > 50K`) is underrepresented in the dataset. Accuracy can therefore be misleading when evaluating an imbalanced classification problem.
+- **Validation instead of test** because the test set is reserved exclusively for the final evaluation of the selected model. Using test performance for model selection would introduce information leakage from the test set into the model selection process.
+
+### Experiment Tracking (`src/experiment_log.py`)
+
+Each trained architecture adds a new row to:
+
+`logs/experiments.csv`
+
+The log contains information such as:
+
+- Timestamp
+- Model variant
+- Validation accuracy
+- Validation precision
+- Validation recall
+- Validation F1
+- Test accuracy
+- Test precision
+- Test recall
+- Test F1
+
+The file is created automatically if it does not already exist.
+
+Each execution of `main.py` appends new rows without overwriting previous results, providing a historical record of all experiment runs.
+
+### Production Artifacts and `predict.py`
+
+Once all architectures have been compared, `main.py` saves everything required to perform inference with the winning model under:
+
+`models/production/`
+
+The following artifacts are generated:
+
+- `model.pt` — trained model weights (`state_dict`).
+- `preprocessor.joblib` — the `ColumnTransformer` fitted on the training dataset.
+- `metadata.json` — metadata describing the winning architecture and the `input_dim` used to construct it. This information is required to reconstruct the neural network before loading its weights.
+
+`predict.py` loads these production artifacts and exposes a `predict(df)` function that can generate predictions for new, unseen data without retraining the model.
+
+```bash
+python predict.py
+>>>>>>> beea004 (updated the READ.md)
 
 

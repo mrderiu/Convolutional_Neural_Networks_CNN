@@ -1,0 +1,19 @@
+{
+  "experiment_id": "20260906T092059Z_resnet18",
+  "model_name": "resnet18",
+  "created_at_utc": "20260906T092059Z",
+  "val_roc_auc": 0.972019675925926,
+  "val_pr_auc": 0.9678445694110676,
+  "val_accuracy": 0.9090909090909091,
+  "val_balanced_accuracy": 0.9052083333333334,
+  "val_precision_malignant": 0.9324324324324325,
+  "val_recall_malignant": 0.8625,
+  "val_specificity": 0.9479166666666666,
+  "val_f1": 0.8961038961038961,
+  "threshold": 0.595,
+  "duration_seconds": 1485.94,
+  "total_parameters": 11308097,
+  "trainable_parameters_final_stage": 11308097,
+  "checkpoint_path": "/opt/mrderiu/001_Convolutional_Neural_Networks_CNN/models/experiments/20260906T092059Z_resnet18/best.pt",
+  "history_path": "/opt/mrderiu/001_Convolutional_Neural_Networks_CNN/models/experiments/20260906T092059Z_resnet18/history.csv"
+}

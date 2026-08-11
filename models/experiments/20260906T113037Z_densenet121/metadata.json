@@ -1,0 +1,19 @@
+{
+  "experiment_id": "20260906T113037Z_densenet121",
+  "model_name": "densenet121",
+  "created_at_utc": "20260906T113037Z",
+  "val_roc_auc": 0.9630497685185184,
+  "val_pr_auc": 0.9567356215662471,
+  "val_accuracy": 0.8825757575757576,
+  "val_balanced_accuracy": 0.8871527777777778,
+  "val_precision_malignant": 0.8272058823529411,
+  "val_recall_malignant": 0.9375,
+  "val_specificity": 0.8368055555555556,
+  "val_f1": 0.87890625,
+  "threshold": 0.29,
+  "duration_seconds": 4042.53,
+  "total_parameters": 6954881,
+  "trainable_parameters_final_stage": 6954881,
+  "checkpoint_path": "/opt/mrderiu/001_Convolutional_Neural_Networks_CNN/models/experiments/20260906T113037Z_densenet121/best.pt",
+  "history_path": "/opt/mrderiu/001_Convolutional_Neural_Networks_CNN/models/experiments/20260906T113037Z_densenet121/history.csv"
+}

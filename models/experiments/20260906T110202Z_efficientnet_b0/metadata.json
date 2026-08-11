@@ -1,0 +1,19 @@
+{
+  "experiment_id": "20260906T110202Z_efficientnet_b0",
+  "model_name": "efficientnet_b0",
+  "created_at_utc": "20260906T110202Z",
+  "val_roc_auc": 0.948191550925926,
+  "val_pr_auc": 0.9355729966146593,
+  "val_accuracy": 0.875,
+  "val_balanced_accuracy": 0.878125,
+  "val_precision_malignant": 0.8295454545454546,
+  "val_recall_malignant": 0.9125,
+  "val_specificity": 0.84375,
+  "val_f1": 0.8690476190476191,
+  "threshold": 0.4699999999999999,
+  "duration_seconds": 1663.04,
+  "total_parameters": 4008829,
+  "trainable_parameters_final_stage": 4008829,
+  "checkpoint_path": "/opt/mrderiu/001_Convolutional_Neural_Networks_CNN/models/experiments/20260906T110202Z_efficientnet_b0/best.pt",
+  "history_path": "/opt/mrderiu/001_Convolutional_Neural_Networks_CNN/models/experiments/20260906T110202Z_efficientnet_b0/history.csv"
+}
