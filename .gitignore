@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Dataset
+data/input/*/
+data/train/
+data/test/
+
+# Model artifacts
+models/experiments/*/
+models/production/*/
+
+# Logs / generated figures
+logs/*.csv
+reports/figures/*.png
