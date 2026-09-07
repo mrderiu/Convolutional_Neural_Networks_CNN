@@ -91,9 +91,7 @@ nn.Conv2d(
     padding=0 # Number of pixels added around the image border.
 )
 ```
-<<<<<<< HEAD
-=======
-a more modern implementation is
+A more modern implementation is:
 ```
 model = nn.Sequential(
     nn.Linear(8, 12),
@@ -227,6 +225,6 @@ The following artifacts are generated:
 
 ```bash
 python predict.py
->>>>>>> beea004 (updated the READ.md)
+
 
 
